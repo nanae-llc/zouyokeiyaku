@@ -11,8 +11,8 @@ import {
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ContractData, Gift } from '../types/contract';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { ContractData } from '../types/contract';
+import { PDFDownloadLink, BlobProvider } from '@react-pdf/renderer';
 import { ContractPDF } from './ContractPDF';
 import { format, parse } from 'date-fns';
 
@@ -107,10 +107,6 @@ export const ContractForm = () => {
       };
       reader.readAsText(file);
     }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
   };
 
   return (
@@ -245,20 +241,24 @@ export const ContractForm = () => {
                     onChange={handleLoad}
                   />
                 </Button>
-                {/* @ts-ignore */}
-                <PDFDownloadLink
-                  document={<ContractPDF data={data} />}
-                  fileName="contract.pdf"
-                >
-                  {({ loading }: { loading: boolean }) => (
+                <BlobProvider document={<ContractPDF data={data} />}>
+                  {({ blob, url, loading }) => (
                     <Button
                       variant="contained"
                       disabled={loading}
+                      onClick={() => {
+                        if (url) {
+                          const link = document.createElement('a');
+                          link.href = url;
+                          link.download = 'contract.pdf';
+                          link.click();
+                        }
+                      }}
                     >
                       {loading ? 'PDF生成中...' : 'PDFをダウンロード'}
                     </Button>
                   )}
-                </PDFDownloadLink>
+                </BlobProvider>
               </Box>
             </Grid>
           </Grid>
