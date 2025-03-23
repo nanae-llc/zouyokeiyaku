@@ -12,7 +12,7 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ContractData } from '../types/contract';
-import { PDFDownloadLink, BlobProvider } from '@react-pdf/renderer';
+import { BlobProvider } from '@react-pdf/renderer';
 import { ContractPDF } from './ContractPDF';
 import { format, parse } from 'date-fns';
 
@@ -242,7 +242,7 @@ export const ContractForm = () => {
                   />
                 </Button>
                 <BlobProvider document={<ContractPDF data={data} />}>
-                  {({ blob, url, loading }) => (
+                  {({ url, loading }) => (
                     <Button
                       variant="contained"
                       disabled={loading}
